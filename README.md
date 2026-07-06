@@ -2,28 +2,71 @@
 
 **Turn one idea into a full startup kit in seconds.**
 
-Type one line about a business idea and a crew of AI agents instantly generates
-a startup name, a ready landing page, a brand look, and social captions — all
-running on **AMD GPUs via Fireworks AI**.
+Type one line about a business idea and a crew of AI agents instantly generates a
+startup name, a ready landing page, a brand look, and social captions — all running
+on **AMD GPUs via Fireworks AI**, and downloadable as a working landing page.
 
-Built for the **AMD Developer Hackathon: ACT II** (Unicorn Track).
+Built for the **AMD Developer Hackathon: ACT II** · Unicorn Track.
 
 ---
 
 ## What it does
 
 You enter an idea like *"an app that helps students find part-time jobs."*
-Four agents run:
+A crew of four specialized AI agents goes to work — and you watch the result
+appear live in seconds:
 
 | Agent | Output |
 |-------|--------|
-| Strategist | name, tagline, value proposition |
-| Copywriter | landing-page copy (hero, 3 features, CTA) |
-| Brand | 5-color palette, logo concept, font style |
-| Social | 3 launch captions |
+| 🧠 Strategist | name, tagline, value proposition |
+| ✍️ Copywriter | landing-page copy (hero, 3 features, CTA) |
+| 🎨 Brand Designer | 5-color palette, logo concept, font style |
+| 📣 Social Manager | 3 launch captions |
 
-The app renders it live as a startup kit — including a working landing-page
-preview.
+Then one click **downloads the whole kit** as a standalone, brand-styled HTML
+landing page you can open in any browser.
+
+---
+
+## How it works
+
+```mermaid
+flowchart TD
+    U[User enters one idea] --> F[React frontend]
+    F -->|POST /generate| B[FastAPI backend]
+    B --> S[🧠 Strategist agent]
+    S -->|name + tagline| P{Run in parallel}
+    P --> C[✍️ Copywriter agent]
+    P --> BR[🎨 Brand agent]
+    P --> SO[📣 Social agent]
+    C --> A[Assemble startup kit]
+    BR --> A
+    SO --> A
+    A -->|JSON| F
+    F --> R[Live reveal + downloadable kit]
+
+    S -.LLM call.-> FW[Fireworks AI on AMD GPUs]
+    C -.LLM call.-> FW
+    BR -.LLM call.-> FW
+    SO -.LLM call.-> FW
+```
+
+The **Strategist runs first** (everything depends on the name), then the other
+three agents run **in parallel** for speed. Each agent is a single focused LLM
+call on Fireworks AI, forced to return JSON so the frontend renders reliably.
+The orchestrator is **resilient** — if one agent fails, the others still return.
+
+---
+
+## Features
+
+- ⚡ **Live agent reveal** — watch the four-agent crew work, one by one
+- 🎨 **Full brand kit** — name, landing page, color palette, logo mark, captions
+- 🖥️ **Live landing-page preview** — rendered from the generated content
+- ⬇️ **Download kit** — export a standalone, brand-styled HTML landing page
+- 🔁 **Try another idea / regenerate** — run idea after idea instantly
+- 🧩 **Resilient by design** — one failed agent never breaks the demo
+- 🐳 **Fully containerized** — Docker + docker-compose, ready for AMD Developer Cloud
 
 ---
 
@@ -46,12 +89,12 @@ python -m venv .venv
 # Windows:  .venv\Scripts\activate
 # macOS/Linux:  source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env        # then add your Fireworks key (optional for mock mode)
+cp .env.example .env        # then add your Fireworks key (optional — mock mode works without it)
 uvicorn main:app --reload --port 8000
 ```
 
-The API runs at http://localhost:8000. Without a key it runs in **mock mode**
-and returns sample data, so you can build the UI right away.
+The API runs at http://localhost:8000. Without a key it runs in **mock mode** and
+returns sample data, so you can build and demo the UI right away.
 
 ### 2. Frontend
 
@@ -68,7 +111,7 @@ Open http://localhost:5173.
 ## Run it with Docker (production-style)
 
 ```bash
-# from the project root, with backend/.env filled in
+# from the project root, with backend/.env present
 docker compose up --build
 ```
 
@@ -77,16 +120,18 @@ docker compose up --build
 
 ---
 
-## Get your Fireworks API key
+## Configuration
 
-At hackathon kickoff you receive Fireworks AI credits. Create an API key in the
-Fireworks dashboard, then put it in `backend/.env`:
+Set these in `backend/.env`:
 
 ```
-FIREWORKS_API_KEY=fw_xxxxxxxxxxxxxxxx
+FIREWORKS_API_KEY=fw_xxxxxxxxxxxxxxxx     # your Fireworks key
+FIREWORKS_MODEL=accounts/fireworks/models/llama-v3p1-8b-instruct
+USE_MOCK=false                            # true = sample data, no API calls
 ```
 
-Restart the backend and it switches from mock mode to real AI output.
+`USE_MOCK=true` forces sample data even with a key set — handy for building the UI
+or demoing offline.
 
 ---
 
@@ -96,23 +141,30 @@ Restart the backend and it switches from mock mode to real AI output.
 AI launchpad/
 ├── backend/
 │   ├── main.py            FastAPI app + /generate route
-│   ├── agents.py          the 4-agent crew + orchestrator
+│   ├── agents.py          the 4-agent crew + resilient orchestrator
 │   ├── requirements.txt
 │   ├── .env.example
 │   └── Dockerfile
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx        input form + reveal
-│   │   └── components/ResultKit.jsx   renders the startup kit
+│   │   ├── App.jsx                    input, agent reveal, orchestration
+│   │   ├── kit.js                     downloadable HTML kit builder
+│   │   └── components/
+│   │       ├── AgentProgress.jsx      live agent crew UI
+│   │       └── ResultKit.jsx          renders the startup kit
 │   ├── package.json
 │   └── Dockerfile
 ├── docker-compose.yml
-└── agent-prompts.md
+├── agent-prompts.md
+└── PITCH_AND_DEMO_SCRIPT.md
 ```
 
 ---
 
-## Deploy on AMD Developer Cloud
+## Built on AMD
 
-Build the images and run the same `docker compose up` on your AMD Developer
-Cloud instance using your hackathon credits.
+Every agent runs as an LLM call served on **AMD GPUs via Fireworks AI**, and the
+whole app is containerized with Docker for deployment on **AMD Developer Cloud**.
+
+*AI Launchpad — the fastest way from idea to launch, for every founder, student,
+and creator.*
