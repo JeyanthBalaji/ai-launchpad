@@ -54,15 +54,26 @@ async def _call_llm(system_prompt: str, user_prompt: str) -> dict:
         "response_format": {"type": "json_object"},
     }
 
-    async with httpx.AsyncClient(timeout=60) as client:
-        resp = await client.post(
-            f"{BASE_URL}/chat/completions", headers=headers, json=payload
-        )
-        resp.raise_for_status()
-        data = resp.json()
+    # Retry a few times on transient failures (timeouts, rate limits, 5xx)
+    # so a single hiccup never breaks a live demo.
+    last_error = None
+    for attempt in range(3):
+        try:
+            async with httpx.AsyncClient(timeout=60) as client:
+                resp = await client.post(
+                    f"{BASE_URL}/chat/completions", headers=headers, json=payload
+                )
+                resp.raise_for_status()
+                data = resp.json()
+            content = data["choices"][0]["message"]["content"]
+            return _safe_json(content)
+        except Exception as e:  # noqa: BLE001 - deliberately broad for resilience
+            last_error = e
+            if attempt < 2:
+                await asyncio.sleep(1.5 * (attempt + 1))  # brief backoff
 
-    content = data["choices"][0]["message"]["content"]
-    return _safe_json(content)
+    # All retries failed — surface a clear error to the orchestrator.
+    raise RuntimeError(f"LLM call failed after retries: {last_error}")
 
 
 def _safe_json(text: str) -> dict:
@@ -168,24 +179,42 @@ async def social(name: str, value_proposition: str) -> dict:
 # Orchestrator — runs the crew in the right order
 # ---------------------------------------------------------------------------
 async def run_crew(idea: str, audience: str) -> dict:
-    """Coordinate the agents and assemble the full startup kit."""
+    """Coordinate the agents and assemble the full startup kit.
+
+    Resilient by design: if one agent fails, the others still return, so the
+    demo never shows a blank screen. Any failed section comes back empty and
+    the frontend simply skips it.
+    """
     # 1. Strategist first — everything else depends on the name.
-    strategy = await strategist(idea, audience)
+    try:
+        strategy = await strategist(idea, audience)
+    except Exception:
+        strategy = {
+            "name": "Your Startup",
+            "tagline": "",
+            "value_proposition": "",
+        }
+
     name = strategy.get("name", "Your Startup")
     tagline = strategy.get("tagline", "")
     value_prop = strategy.get("value_proposition", "")
 
-    # 2. The other three can run in parallel once we have the name.
+    # 2. The other three run in parallel once we have the name.
+    #    return_exceptions=True means one failure doesn't sink the others.
     copy, branding, socials = await asyncio.gather(
         copywriter(name, value_prop),
         brand(name, tagline),
         social(name, value_prop),
+        return_exceptions=True,
     )
+
+    def safe(result):
+        return {} if isinstance(result, Exception) else result
 
     return {
         "strategy": strategy,
-        "copy": copy,
-        "brand": branding,
-        "social": socials,
+        "copy": safe(copy),
+        "brand": safe(branding),
+        "social": safe(socials),
         "mock": MOCK_MODE,
     }
