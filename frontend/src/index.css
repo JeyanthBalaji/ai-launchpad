@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth entrance for revealed sections */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-reveal {
+  animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Slow-drifting background gradient for a premium feel */
+@keyframes gradientDrift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(120deg, #38bdf8, #6366f1, #38bdf8);
+  background-size: 200% 200%;
+  animation: gradientDrift 6s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Soft pulse for the credibility badge dot */
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.pulse-dot {
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+/* Fade-in for toast / small feedback */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadein {
+  animation: fadeIn 0.3s ease both;
+}
+
+/* Floating background orbs — slow drifting motion for a living page */
+@keyframes float1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.1);
+  }
+}
+
+@keyframes float2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-35px, 25px) scale(1.08);
+  }
+}
+
+.orb {
+  position: fixed;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb-1 {
+  width: 380px;
+  height: 380px;
+  background: #2563eb;
+  top: -80px;
+  left: -60px;
+  animation: float1 14s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 420px;
+  height: 420px;
+  background: #38bdf8;
+  bottom: -120px;
+  right: -80px;
+  animation: float2 18s ease-in-out infinite;
+}
+
+/* Logo mark pop-in */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-pop {
+  animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Progress bar fill transition handled inline via width */
+.progress-fill {
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
