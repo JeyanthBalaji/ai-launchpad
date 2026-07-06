@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { downloadKit } from "../kit.js";
 
 /**
  * Renders the full startup kit with a dramatic staggered reveal:
@@ -162,11 +163,18 @@ export default function ResultKit({ data, onReset }) {
         </ul>
       </section>
 
-      {/* Try another idea */}
+      {/* Actions */}
       <div
-        className="animate-reveal flex justify-center pt-2"
+        className="animate-reveal flex flex-wrap justify-center gap-3 pt-2"
         style={{ animationDelay: "0.6s" }}
       >
+        <button
+          type="button"
+          onClick={() => downloadKit(data)}
+          className="rounded-lg bg-sky-500 px-6 py-3 font-semibold text-slate-950 transition hover:bg-sky-400"
+        >
+          ⬇ Download kit
+        </button>
         <button
           type="button"
           onClick={onReset}
