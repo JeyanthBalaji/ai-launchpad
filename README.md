@@ -161,10 +161,19 @@ AI launchpad/
 
 ---
 
-## Built on AMD
+## AMD compute usage
 
-Every agent runs as an LLM call served on **AMD GPUs via Fireworks AI**, and the
-whole app is containerized with Docker for deployment on **AMD Developer Cloud**.
+AI Launchpad runs its agent crew on **AMD compute**. The backend talks to any
+OpenAI-compatible endpoint, so inference runs on AMD hardware in two ways:
+
+- **Fireworks AI** — every agent is an LLM call served on **AMD GPUs** via
+  Fireworks AI (recommended models: MiniMax, Kimi K series).
+- **AMD Developer Cloud** — the same agents can run against a model we host on an
+  **AMD Developer Cloud GPU instance** (≈48 GB) using vLLM, with no code changes —
+  just point `FIREWORKS_BASE_URL` at the vLLM server.
+
+Full setup for both paths is in **[AMD_DEPLOYMENT.md](AMD_DEPLOYMENT.md)**.
+The app is also containerized with Docker for reproducible deployment.
 
 *AI Launchpad — the fastest way from idea to launch, for every founder, student,
 and creator.*
