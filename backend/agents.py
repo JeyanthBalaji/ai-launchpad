@@ -99,10 +99,10 @@ def _safe_json(text: str) -> dict:
 async def strategist(idea: str, audience: str) -> dict:
     if MOCK_MODE:
         return {
-            "name": "JobSpring",
-            "tagline": "Your next shift, one tap away.",
-            "value_proposition": "JobSpring connects students with flexible, "
-            "verified part-time jobs near campus in seconds.",
+            "name": "JobHopper",
+            "tagline": "Find your flex job, college student!",
+            "value_proposition": "Streamline your job search with tailored "
+            "opportunities and flexible hours.",
         }
     system = (
         "You are a startup strategist. Return ONLY JSON with keys "
@@ -115,18 +115,18 @@ async def strategist(idea: str, audience: str) -> dict:
 async def copywriter(name: str, value_proposition: str) -> dict:
     if MOCK_MODE:
         return {
-            "hero_headline": "Find part-time work that fits your schedule",
-            "hero_subtext": "Verified local jobs, flexible hours, instant apply — "
-            "built for students.",
+            "hero_headline": "Find Your Dream Job, Tailored Just For You",
+            "hero_subtext": "JobHopper connects you with customized job "
+            "opportunities that fit your skills and preferences. Work on your terms.",
             "features": [
-                {"title": "Verified jobs", "desc": "Every listing is checked so you "
-                 "only see real, safe opportunities."},
-                {"title": "Flexible hours", "desc": "Filter by shifts that fit "
-                 "around your classes."},
-                {"title": "Instant apply", "desc": "One tap to apply — no long forms, "
-                 "no waiting."},
+                {"title": "Tailored Opportunities", "desc": "Get job listings that "
+                 "match your skills and career goals, making your search efficient."},
+                {"title": "Flexible Hours", "desc": "Choose when and where you work, "
+                 "giving you freedom to balance career and personal life."},
+                {"title": "Personalized Recommendations", "desc": "We use AI to "
+                 "suggest jobs that align with your career path and interests."},
             ],
-            "cta": "Find your first shift",
+            "cta": "Start Your JobHopper Journey Now",
         }
     system = (
         "You are a landing-page copywriter. Return ONLY JSON with keys "
@@ -140,10 +140,10 @@ async def copywriter(name: str, value_proposition: str) -> dict:
 async def brand(name: str, tagline: str) -> dict:
     if MOCK_MODE:
         return {
-            "palette": ["#0F172A", "#2563EB", "#38BDF8", "#F8FAFC", "#F59E0B"],
-            "logo_concept": "A stylized sprouting leaf inside a location pin — "
-            "growth plus 'jobs near you'.",
-            "font_style": "Geometric sans-serif (e.g. Poppins) — friendly and modern.",
+            "palette": ["#4CAF50", "#2E8B57", "#32CD32", "#98FB98", "#D3D3D3"],
+            "logo_concept": "A dynamic arrow pointing upwards with the JobHopper "
+            "wordmark — symbolizing movement toward new opportunities.",
+            "font_style": "Open Sans, sans-serif — clean, modern, and professional.",
         }
     system = (
         "You are a brand designer. Return ONLY JSON with keys "
@@ -158,12 +158,12 @@ async def social(name: str, value_proposition: str) -> dict:
     if MOCK_MODE:
         return {
             "captions": [
-                "Class in the morning, shift in the afternoon. JobSpring finds "
-                "part-time work that fits your life. #StudentJobs #SideHustle",
-                "Stop scrolling sketchy listings. Every JobSpring job is verified "
-                "and near your campus. #PartTime #StudentLife",
-                "Your schedule is busy enough. Let JobSpring find the shift — you "
-                "just show up. #Students #Flexible",
+                "Revolutionize your job search with JobHopper! Find tailored "
+                "opportunities & work on your terms. #JobHopper #CareerRevolution",
+                "Say goodbye to generic job applications. JobHopper helps you find "
+                "perfect, flexible roles. Join the revolution today! #JobHopper #FlexibleWork",
+                "Streamline your career journey with JobHopper. Tailored "
+                "opportunities await. #JobHopper #FindYourPerfectRole",
             ]
         }
     system = (
