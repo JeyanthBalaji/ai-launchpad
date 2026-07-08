@@ -1,0 +1,43 @@
+{
+  "strategy": {
+    "name": "JobHopper",
+    "tagline": "Find your flex job, college student!",
+    "value_proposition": "Streamline your job search with tailored opportunities and flexible hours."
+  },
+  "copy": {
+    "hero_headline": "Find Your Dream Job, Tailored Just For You",
+    "hero_subtext": "JobHopper connects you with customized job opportunities that fit your skills and preferences. Work on your terms.",
+    "features": [
+      {
+        "title": "Tailored Opportunities",
+        "desc": "Get job listings that match your skills and career goals, making your search efficient and effective."
+      },
+      {
+        "title": "Flexible Hours",
+        "desc": "Choose when and where you work, giving you the freedom to balance your career and personal life."
+      },
+      {
+        "title": "Personalized Recommendations",
+        "desc": "We use AI to suggest jobs that align with your career path and interests, ensuring you find the perfect fit."
+      }
+    ],
+    "cta": "Start Your JobHopper Journey Now"
+  },
+  "brand": {
+    "palette": ["#4CAF50", "#2E8B57", "#32CD32", "#98FB98", "#D3D3D3"],
+    "logo_concept": "A dynamic arrow pointing upwards with the text 'JobHopper' integrated into the design, symbolizing movement towards new opportunities.",
+    "font_style": "Open Sans, sans-serif; a clean, modern font that is both readable and professional, suitable for a tech-oriented startup."
+  },
+  "social": {
+    "captions": [
+      "Revolutionize your job search with JobHopper! Find tailored opportunities & work on your terms. #JobHopper #CareerRevolution",
+      "Say goodbye to generic job applications. JobHopper helps you find perfect, flexible roles. Join the revolution today! #JobHopper #FlexibleWork",
+      "Streamline your career journey with JobHopper. Tailored opportunities await. #JobHopper #FindYourPerfectRole"
+    ]
+  },
+  "mock": false,
+  "_engine": {
+    "provider": "AMD Developer Cloud (vLLM)",
+    "model": "Qwen/Qwen2.5-7B-Instruct"
+  }
+}

@@ -17,3 +17,4 @@ Thumbs.db
 
 # Temporary QA preview images
 deck_qa/
+_qa*.png

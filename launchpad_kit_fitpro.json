@@ -1,0 +1,43 @@
+{
+  "strategy": {
+    "name": "FitPro",
+    "tagline": "Your Personal Fitness Partner, Anytime, Anywhere",
+    "value_proposition": "Squeeze in the perfect workout for your busy schedule with our AI-powered, personalized fitness plans."
+  },
+  "copy": {
+    "hero_headline": "FitPro - Your Personal Trainer Anytime, Anywhere",
+    "hero_subtext": "Experience tailored workouts designed just for you, no matter your schedule.",
+    "features": [
+      {
+        "title": "AI-Powered Personalization",
+        "desc": "Our advanced AI adapts to your progress and preferences, ensuring every workout is uniquely yours."
+      },
+      {
+        "title": "Flexible Scheduling",
+        "desc": "Work out at your convenience with sessions available 24/7, perfectly fitting into your busy lifestyle."
+      },
+      {
+        "title": "Expert Guidance",
+        "desc": "Get professional training without leaving home. Our certified trainers guide you through each exercise."
+      }
+    ],
+    "cta": "Start Your Free Trial Today!"
+  },
+  "brand": {
+    "palette": ["#4CAF50", "#FFEB3B", "#F44336", "#2196F3", "#9C27B0"],
+    "logo_concept": "A dynamic silhouette of a person in motion, blending into a globe to symbolize global accessibility and personal fitness.",
+    "font_style": "Roboto, sans-serif; Open Sans, sans-serif"
+  },
+  "social": {
+    "captions": [
+      "Get fit on the go with FitPro! Our AI tailors workouts to your schedule. Stay strong, stay busy! #FitnessOnTheGo #AIWorkouts",
+      "No time to hit the gym? FitPro has got you covered. Personalized workouts anytime, anywhere. Start now! #BusySchedule #PersonalizedFitness",
+      "Achieve your fitness goals without sacrificing your time. FitPro's AI-driven plans fit perfectly into your life. Join us! #TechForHealth #WorkoutFlexibility"
+    ]
+  },
+  "mock": false,
+  "_engine": {
+    "provider": "AMD Developer Cloud (vLLM)",
+    "model": "Qwen/Qwen2.5-7B-Instruct"
+  }
+}
