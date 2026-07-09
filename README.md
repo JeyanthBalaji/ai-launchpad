@@ -9,6 +9,10 @@ downloadable as a working landing page.
 
 Built for the **AMD Developer Hackathon: ACT II** · Unicorn Track.
 
+<p align="center">
+  <img src="docs/app.png" alt="AI Launchpad — one idea in, a full startup kit out" width="720">
+</p>
+
 ---
 
 ## What it does
@@ -24,8 +28,16 @@ appear live in seconds:
 | 🎨 Brand Designer | 5-color palette, logo concept, font style |
 | 📣 Social Manager | 3 launch captions |
 
-Then one click **downloads the whole kit** as a standalone, brand-styled HTML
-landing page you can open in any browser.
+The landing page previews **live, in the brand's own generated colors** — then one
+click **downloads the whole kit** as a standalone, brand-styled HTML page you can
+open in any browser.
+
+<p align="center">
+  <img src="docs/app-kit.png" alt="Generated landing page, brand palette and social captions" width="640">
+</p>
+
+*Above: a real kit generated on an AMD Developer Cloud GPU from the single line
+"an app that helps students find part-time jobs".*
 
 ---
 
