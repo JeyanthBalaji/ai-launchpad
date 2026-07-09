@@ -105,7 +105,7 @@ export default function App() {
           {/* Credibility badge */}
           <div className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/70 px-4 py-1.5 text-xs text-slate-300">
             <span className="pulse-dot h-2 w-2 rounded-full bg-emerald-400" />
-            Powered by AMD GPUs · Fireworks AI
+            Powered by AMD Developer Cloud GPUs · vLLM
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">

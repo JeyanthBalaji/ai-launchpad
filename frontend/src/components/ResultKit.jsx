@@ -25,8 +25,10 @@ export default function ResultKit({ data, onReset }) {
     <div className="mt-10 space-y-8">
       {mock && (
         <div className="animate-reveal rounded-lg border border-amber-800 bg-amber-950/40 p-3 text-sm text-amber-300">
-          Running in <strong>mock mode</strong> (sample data). Add your Fireworks
-          key and set <code>USE_MOCK=false</code> for live AI output.
+          <strong>Offline sample</strong> — a real kit previously generated on an{" "}
+          <strong>AMD Developer Cloud GPU</strong> (Qwen2.5-7B via vLLM). Point{" "}
+          <code>FIREWORKS_BASE_URL</code> at a live endpoint and set{" "}
+          <code>USE_MOCK=false</code> to generate fresh output.
         </div>
       )}
 
