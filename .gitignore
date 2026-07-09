@@ -21,3 +21,6 @@ _qa*.png
 
 # LibreOffice lock files
 .~lock.*#
+
+# Video working files (large)
+docs/_vid/
