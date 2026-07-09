@@ -208,6 +208,16 @@ endpoint using only the Python standard library. Its committed outputs live in
 "_engine": { "provider": "AMD Developer Cloud (vLLM)", "model": "Qwen/Qwen2.5-7B-Instruct" }
 ```
 
+<p align="center">
+  <img src="docs/amd-vllm.png" alt="vLLM serving Qwen2.5-7B on an AMD Developer Cloud GPU" width="760">
+  <br><em>vLLM serving the model on the AMD GPU — "Application startup complete."</em>
+</p>
+
+<p align="center">
+  <img src="docs/amd-kit.png" alt="The four-agent crew generating a real startup kit on the AMD GPU" width="760">
+  <br><em>The four-agent crew producing a real kit on that GPU — note <code>"mock": false</code>.</em>
+</p>
+
 **Offline mode.** With no live endpoint configured, the app serves these saved
 AMD-generated kits and says so plainly in the UI, rather than pretending to
 generate. Run the same idea twice against a live GPU and you get a different
