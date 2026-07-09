@@ -13,6 +13,10 @@ Built for the **AMD Developer Hackathon: ACT II** · Unicorn Track.
   <img src="docs/app.png" alt="AI Launchpad — one idea in, a full startup kit out" width="720">
 </p>
 
+<p align="center">
+  <strong>▶ <a href="https://youtu.be/V-YFWfo3Eo8">Watch the 90-second demo</a></strong>
+</p>
+
 ---
 
 ## What it does
