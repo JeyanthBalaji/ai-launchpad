@@ -4,7 +4,8 @@
 
 Type one line about a business idea and a crew of AI agents instantly generates a
 startup name, a ready landing page, a brand look, and social captions — all running
-on **AMD GPUs via Fireworks AI**, and downloadable as a working landing page.
+on **AMD GPUs** (a self-hosted vLLM model on the AMD Developer Cloud), and
+downloadable as a working landing page.
 
 Built for the **AMD Developer Hackathon: ACT II** · Unicorn Track.
 
@@ -45,7 +46,7 @@ flowchart TD
     A -->|JSON| F
     F --> R[Live reveal + downloadable kit]
 
-    S -.LLM call.-> FW[Fireworks AI on AMD GPUs]
+    S -.LLM call.-> FW[vLLM on AMD GPU]
     C -.LLM call.-> FW
     BR -.LLM call.-> FW
     SO -.LLM call.-> FW
@@ -53,8 +54,9 @@ flowchart TD
 
 The **Strategist runs first** (everything depends on the name), then the other
 three agents run **in parallel** for speed. Each agent is a single focused LLM
-call on Fireworks AI, forced to return JSON so the frontend renders reliably.
-The orchestrator is **resilient** — if one agent fails, the others still return.
+call on an open model running on an AMD GPU, forced to return JSON so the frontend
+renders reliably. The orchestrator is **resilient** — if one agent fails, the
+others still return.
 
 ---
 
@@ -74,7 +76,8 @@ The orchestrator is **resilient** — if one agent fails, the others still retur
 
 - **Frontend:** React + Vite + Tailwind CSS
 - **Backend:** Python + FastAPI
-- **AI:** Fireworks AI (open models on AMD GPUs), one focused call per agent
+- **AI:** open models on **AMD GPUs** — self-hosted vLLM on the AMD Developer
+  Cloud (Fireworks AI also supported), one focused call per agent
 - **Packaging:** Docker + docker-compose
 
 ---
@@ -154,6 +157,12 @@ AI launchpad/
 │   │       └── ResultKit.jsx          renders the startup kit
 │   ├── package.json
 │   └── Dockerfile
+├── launchpad_real.py           runs the real crew on an AMD GPU (stdlib only)
+├── launchpad_kit.json          real output generated on AMD (JobHopper)
+├── launchpad_kit_fitpro.json   real output generated on AMD (FitPro)
+├── build_deck.py               rebuilds the pitch deck (python-pptx)
+├── AI_Launchpad_Deck.pptx/.pdf the pitch deck
+├── AMD_DEPLOYMENT.md           how to run it on AMD compute
 ├── docker-compose.yml
 ├── agent-prompts.md
 └── PITCH_AND_DEMO_SCRIPT.md
@@ -163,14 +172,33 @@ AI launchpad/
 
 ## AMD compute usage
 
-AI Launchpad runs its agent crew on **AMD compute**. The backend talks to any
-OpenAI-compatible endpoint, so inference runs on AMD hardware in two ways:
+AI Launchpad runs its agent crew on **AMD compute** — verified end to end, not just
+claimed.
 
-- **Fireworks AI** — every agent is an LLM call served on **AMD GPUs** via
-  Fireworks AI (recommended models: MiniMax, Kimi K series).
-- **AMD Developer Cloud** — the same agents can run against a model we host on an
-  **AMD Developer Cloud GPU instance** (≈48 GB) using vLLM, with no code changes —
-  just point `FIREWORKS_BASE_URL` at the vLLM server.
+**How it was run.** A `Qwen/Qwen2.5-7B-Instruct` model was served with **vLLM on an
+AMD Developer Cloud GPU** (ROCm), and all four agents were executed against it:
+
+```bash
+# on the AMD GPU pod (notebooks.amd.com/hackathon)
+vllm serve Qwen/Qwen2.5-7B-Instruct --port 8000 --gpu-memory-utilization 0.9 --max-model-len 8192
+
+# then, in a second terminal
+python launchpad_real.py
+```
+
+[`launchpad_real.py`](launchpad_real.py) runs the real four-agent crew against that
+endpoint using only the Python standard library. Its committed outputs —
+[`launchpad_kit.json`](launchpad_kit.json) (JobHopper) and
+[`launchpad_kit_fitpro.json`](launchpad_kit_fitpro.json) (FitPro) — each record:
+
+```json
+"mock": false,
+"_engine": { "provider": "AMD Developer Cloud (vLLM)", "model": "Qwen/Qwen2.5-7B-Instruct" }
+```
+
+**Portability.** The backend talks to any OpenAI-compatible endpoint
+(`FIREWORKS_BASE_URL` + `FIREWORKS_MODEL`), so the identical code also runs on
+**Fireworks AI**, which likewise serves open models on AMD GPUs — no code changes.
 
 Full setup for both paths is in **[AMD_DEPLOYMENT.md](AMD_DEPLOYMENT.md)**.
 The app is also containerized with Docker for reproducible deployment.
