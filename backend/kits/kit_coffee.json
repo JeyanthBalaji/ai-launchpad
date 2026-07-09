@@ -1,0 +1,49 @@
+{
+  "strategy": {
+    "name": "BrewBarista",
+    "tagline": "Fresh beans, every month.",
+    "value_proposition": "Discover rare blends from around the world, curated to perfection for your home barista journey."
+  },
+  "copy": {
+    "hero_headline": "Unlock the World's Rarest Blends",
+    "hero_subtext": "Experience the art of brewing with our expertly curated selections from around the globe.",
+    "features": [
+      {
+        "title": "Expert Curations",
+        "desc": "Our team of master baristas handpick each blend to ensure you get the finest quality."
+      },
+      {
+        "title": "Diverse Origins",
+        "desc": "Explore unique flavors from over 20 countries, each with its own story and taste profile."
+      },
+      {
+        "title": "Convenience at Home",
+        "desc": "Enjoy premium coffee without leaving your home, delivered right to your doorstep."
+      }
+    ],
+    "cta": "Start Your Journey Today!"
+  },
+  "brand": {
+    "palette": [
+      "#4527A0",
+      "#F7DC6F",
+      "#3498DB",
+      "#E74C3C",
+      "#2ECC71"
+    ],
+    "logo_concept": "A blend of coffee beans and a barista's apron, symbolizing the craftsmanship and freshness of the monthly bean delivery.",
+    "font_style": "Roboto, sans-serif; Open Sans, sans-serif"
+  },
+  "social": {
+    "captions": [
+      "Explore the world through a cup with BrewBarista! Discover rare coffee blends and elevate your home brewing game. #CoffeeAdventures #HomeBarista",
+      "From distant lands to your kitchen table. Experience the art of perfect coffee at home with BrewBarista. #CoffeeLovers #BrewPerfection",
+      "Unleash your inner barista with our carefully curated coffee blends. Join us on this aromatic journey! #CoffeeBlends #BaristaLife"
+    ]
+  },
+  "mock": false,
+  "_engine": {
+    "provider": "AMD Developer Cloud (vLLM)",
+    "model": "Qwen/Qwen2.5-7B-Instruct"
+  }
+}

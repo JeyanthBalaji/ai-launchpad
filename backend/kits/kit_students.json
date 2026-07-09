@@ -1,0 +1,49 @@
+{
+  "strategy": {
+    "name": "JobHive",
+    "tagline": "Find your fit, not just any job.",
+    "value_proposition": "Streamlined job search for college students, connecting them with part-time opportunities tailored to their schedules and skills."
+  },
+  "copy": {
+    "hero_headline": "Find Your Perfect Part-Time Job",
+    "hero_subtext": "JobHive connects college students with flexible, skill-matched jobs that fit your busy schedule.",
+    "features": [
+      {
+        "title": "Tailored Job Matches",
+        "desc": "We match you with part-time roles based on your skills and availability."
+      },
+      {
+        "title": "Easy Application Process",
+        "desc": "Apply directly through our platform with one-click access to employer profiles."
+      },
+      {
+        "title": "Flexible Scheduling",
+        "desc": "Choose jobs that work around your classes and extracurricular activities."
+      }
+    ],
+    "cta": "Start Searching Now"
+  },
+  "brand": {
+    "palette": [
+      "#0073AA",
+      "#F4D03F",
+      "#FF4136",
+      "#2ECC40",
+      "#F1C40F"
+    ],
+    "logo_concept": "A bee carrying a magnifying glass, symbolizing the process of finding the perfect job that matches one's skills and interests.",
+    "font_style": "Open Sans, a clean and modern sans-serif font, for its readability and professional appearance."
+  },
+  "social": {
+    "captions": [
+      "🚀 JobHive is here to revolutionize your job search! Find part-time gigs that fit your schedule & skills. #JobHive #CollegeJobs",
+      "🌟 College students, say goodbye to tedious job searches! JobHive connects you with perfect part-time roles. #JobHive #CareerOpportunities",
+      "✨ Streamline your job hunt with JobHive – tailored part-time jobs for busy students like you. #JobHive #StudentJobs"
+    ]
+  },
+  "mock": false,
+  "_engine": {
+    "provider": "AMD Developer Cloud (vLLM)",
+    "model": "Qwen/Qwen2.5-7B-Instruct"
+  }
+}

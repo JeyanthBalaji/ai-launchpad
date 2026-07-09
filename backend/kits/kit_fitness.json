@@ -1,0 +1,49 @@
+{
+  "strategy": {
+    "name": "FitPro",
+    "tagline": "Your Personal Fitness Partner, Anytime, Anywhere",
+    "value_proposition": "Streamline your fitness journey with personalized workout plans tailored to your busy schedule."
+  },
+  "copy": {
+    "hero_headline": "FitPro - Your Personal Trainer in Every Workout",
+    "hero_subtext": "Tailored fitness plans designed for your busy lifestyle. Get fit, stay fit, and reach your goals with ease.",
+    "features": [
+      {
+        "title": "Personalized Workouts",
+        "desc": "Our AI-driven system creates custom workout plans that fit your schedule and fitness level."
+      },
+      {
+        "title": "Flexible Scheduling",
+        "desc": "Work out anytime, anywhere with our mobile-friendly platform that adapts to your busy life."
+      },
+      {
+        "title": "Expert Guidance",
+        "desc": "Stay motivated and on track with expert advice and real-time feedback from certified trainers."
+      }
+    ],
+    "cta": "Start Your Journey Today!"
+  },
+  "brand": {
+    "palette": [
+      "#4CAF50",
+      "#F44336",
+      "#FFEB3B",
+      "#9C27B0",
+      "#00BCD4"
+    ],
+    "logo_concept": "A blend of a fitness gear symbol like dumbbells or a running silhouette with the letter 'F' from 'FitPro', designed to be modern and dynamic, reflecting agility and strength.",
+    "font_style": "Roboto, sans-serif; A clean and modern font that is highly readable and suitable for both headings and body text."
+  },
+  "social": {
+    "captions": [
+      "Elevate your fitness game with FitPro! Get personalized workout plans designed for your busy life. 🏋️‍♂️💪 #FitnessJourney #PersonalizedWorkouts",
+      "Say goodbye to generic workouts and hello to a streamlined fitness routine with FitPro. Tailored plans for your busy schedule. 💪📅 #FitPro #BusyBodies",
+      "Join the FitPro community and take control of your fitness journey today! Personalized workout plans that fit your schedule. 🏃‍♀️✨ #FitProLife #HealthGoals"
+    ]
+  },
+  "mock": false,
+  "_engine": {
+    "provider": "AMD Developer Cloud (vLLM)",
+    "model": "Qwen/Qwen2.5-7B-Instruct"
+  }
+}

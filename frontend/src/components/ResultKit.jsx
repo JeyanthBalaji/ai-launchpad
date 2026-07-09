@@ -7,7 +7,14 @@ import { downloadKit } from "../kit.js";
  * the previous. Interactive touches: copy captions, hover-to-copy palette.
  */
 export default function ResultKit({ data, onReset }) {
-  const { strategy = {}, copy = {}, brand = {}, social = {}, mock } = data;
+  const {
+    strategy = {},
+    copy = {},
+    brand = {},
+    social = {},
+    mock,
+    offline_exact: offlineExact,
+  } = data;
   const palette = brand.palette || [];
   const primary = palette[1] || "#2563EB";
   const dark = palette[0] || "#0F172A";
@@ -25,9 +32,19 @@ export default function ResultKit({ data, onReset }) {
     <div className="mt-10 space-y-8">
       {mock && (
         <div className="animate-reveal rounded-lg border border-amber-800 bg-amber-950/40 p-3 text-sm text-amber-300">
-          <strong>Offline sample</strong> — a real kit previously generated on an{" "}
-          <strong>AMD Developer Cloud GPU</strong> (Qwen2.5-7B via vLLM). Point{" "}
-          <code>FIREWORKS_BASE_URL</code> at a live endpoint and set{" "}
+          {offlineExact ? (
+            <>
+              <strong>Offline sample</strong> — this exact kit was generated on an{" "}
+              <strong>AMD Developer Cloud GPU</strong> (Qwen2.5-7B via vLLM).
+            </>
+          ) : (
+            <>
+              <strong>Offline mode</strong> — showing a saved{" "}
+              <strong>AMD Developer Cloud GPU</strong> example, not generated from
+              your input. Try one of the example ideas above.
+            </>
+          )}{" "}
+          Point <code>FIREWORKS_BASE_URL</code> at a live endpoint and set{" "}
           <code>USE_MOCK=false</code> to generate fresh output.
         </div>
       )}

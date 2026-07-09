@@ -1,17 +1,20 @@
 """
 AI Launchpad — the agent crew.
 
-Four specialized agents, each a single focused LLM call on Fireworks AI
-(which runs open models on AMD GPUs). Every agent is forced to return JSON
-so the frontend can render the result reliably.
+Four specialized agents, each a single focused LLM call to an OpenAI-compatible
+endpoint. In this project that endpoint is a Qwen2.5-7B-Instruct model served with
+vLLM on an **AMD Developer Cloud GPU** (Fireworks AI, which also runs open models
+on AMD GPUs, works unchanged). Every agent is forced to return JSON so the
+frontend can render the result reliably.
 
-If FIREWORKS_API_KEY is not set, the module runs in MOCK mode and returns
-realistic sample data — so you can build and test the UI before your
-hackathon credits go live.
+When no live endpoint is configured, the module runs in OFFLINE mode and serves
+kits that were genuinely generated on the AMD GPU (see `kits/`), so the UI can be
+demoed without a GPU attached.
 """
 
 import json
 import os
+import re
 import asyncio
 
 import httpx
@@ -20,22 +23,77 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("FIREWORKS_API_KEY", "").strip()
-MODEL = os.getenv("FIREWORKS_MODEL", "accounts/fireworks/models/llama-v3p1-8b-instruct")
+MODEL = os.getenv("FIREWORKS_MODEL", "Qwen/Qwen2.5-7B-Instruct")
 BASE_URL = os.getenv("FIREWORKS_BASE_URL", "https://api.fireworks.ai/inference/v1")
 
-# USE_MOCK=true forces sample data even when a key is set (handy before
-# your credits go live). Otherwise, mock mode turns on only when no key.
+# USE_MOCK=true forces offline data even when a key is set.
 FORCE_MOCK = os.getenv("USE_MOCK", "").strip().lower() in ("1", "true", "yes")
 MOCK_MODE = FORCE_MOCK or not API_KEY
+
+KITS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "kits")
+
+# Saved kits, each really generated on an AMD Developer Cloud GPU.
+_KEYWORD_KITS = [
+    (("student", "part-time", "part time", "campus", "intern"), "kit_students.json"),
+    (("coffee", "bean", "barista", "espresso", "brew"), "kit_coffee.json"),
+    (("fitness", "workout", "gym", "exercise", "training"), "kit_fitness.json"),
+    (("pet", "dog", "cat", "walking", "walker"), "kit_pets.json"),
+]
+_DEFAULT_KIT = "kit_students.json"
+
+_HEX_RE = re.compile(r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$")
+_FALLBACK_PALETTE = ["#0F172A", "#2563EB", "#38BDF8", "#F8FAFC", "#F59E0B"]
+
+
+# ---------------------------------------------------------------------------
+# Robustness helpers
+# ---------------------------------------------------------------------------
+def _clean_palette(brand: dict) -> dict:
+    """Keep only real hex colours.
+
+    Models sometimes drift from the schema and return colours interleaved with
+    prose, e.g. ["#FFC107", "A vibrant yellow for energy", "#4CAF50", ...].
+    Rendering those strings as swatches breaks the UI, so we filter and dedupe.
+    """
+    if not isinstance(brand, dict):
+        return {}
+    raw = brand.get("palette")
+    colors, seen = [], set()
+    if isinstance(raw, list):
+        for item in raw:
+            if isinstance(item, str):
+                c = item.strip()
+                if _HEX_RE.match(c) and c.lower() not in seen:
+                    seen.add(c.lower())
+                    colors.append(c)
+    brand["palette"] = (colors or _FALLBACK_PALETTE)[:5]
+    return brand
+
+
+def _load_offline_kit(idea: str) -> dict:
+    """Return a saved AMD-generated kit that best matches the idea."""
+    text = (idea or "").lower()
+    filename, exact = _DEFAULT_KIT, False
+    for keywords, fname in _KEYWORD_KITS:
+        if any(k in text for k in keywords):
+            filename, exact = fname, True
+            break
+
+    with open(os.path.join(KITS_DIR, filename), encoding="utf-8") as f:
+        kit = json.load(f)
+
+    kit["brand"] = _clean_palette(kit.get("brand", {}))
+    kit["mock"] = True
+    kit["offline_exact"] = exact
+    return kit
 
 
 # ---------------------------------------------------------------------------
 # Core LLM call
 # ---------------------------------------------------------------------------
 async def _call_llm(system_prompt: str, user_prompt: str) -> dict:
-    """Send one prompt to Fireworks and parse the JSON response."""
+    """Send one prompt to the model and parse the JSON response."""
     if MOCK_MODE:
-        # Should never be reached (callers short-circuit to mock), but safe.
         return {}
 
     headers = {
@@ -50,12 +108,11 @@ async def _call_llm(system_prompt: str, user_prompt: str) -> dict:
         ],
         "temperature": 0.7,
         "max_tokens": 800,
-        # Ask the model to return strict JSON.
         "response_format": {"type": "json_object"},
     }
 
-    # Retry a few times on transient failures (timeouts, rate limits, 5xx)
-    # so a single hiccup never breaks a live demo.
+    # Retry on transient failures (timeouts, rate limits, 5xx) so a single
+    # hiccup never breaks a live demo.
     last_error = None
     for attempt in range(3):
         try:
@@ -70,9 +127,8 @@ async def _call_llm(system_prompt: str, user_prompt: str) -> dict:
         except Exception as e:  # noqa: BLE001 - deliberately broad for resilience
             last_error = e
             if attempt < 2:
-                await asyncio.sleep(1.5 * (attempt + 1))  # brief backoff
+                await asyncio.sleep(1.5 * (attempt + 1))
 
-    # All retries failed — surface a clear error to the orchestrator.
     raise RuntimeError(f"LLM call failed after retries: {last_error}")
 
 
@@ -97,13 +153,6 @@ def _safe_json(text: str) -> dict:
 # The four agents
 # ---------------------------------------------------------------------------
 async def strategist(idea: str, audience: str) -> dict:
-    if MOCK_MODE:
-        return {
-            "name": "JobHopper",
-            "tagline": "Find your flex job, college student!",
-            "value_proposition": "Streamline your job search with tailored "
-            "opportunities and flexible hours.",
-        }
     system = (
         "You are a startup strategist. Return ONLY JSON with keys "
         '"name", "tagline", "value_proposition". Keep it punchy and modern.'
@@ -113,21 +162,6 @@ async def strategist(idea: str, audience: str) -> dict:
 
 
 async def copywriter(name: str, value_proposition: str) -> dict:
-    if MOCK_MODE:
-        return {
-            "hero_headline": "Find Your Dream Job, Tailored Just For You",
-            "hero_subtext": "JobHopper connects you with customized job "
-            "opportunities that fit your skills and preferences. Work on your terms.",
-            "features": [
-                {"title": "Tailored Opportunities", "desc": "Get job listings that "
-                 "match your skills and career goals, making your search efficient."},
-                {"title": "Flexible Hours", "desc": "Choose when and where you work, "
-                 "giving you freedom to balance career and personal life."},
-                {"title": "Personalized Recommendations", "desc": "We use AI to "
-                 "suggest jobs that align with your career path and interests."},
-            ],
-            "cta": "Start Your JobHopper Journey Now",
-        }
     system = (
         "You are a landing-page copywriter. Return ONLY JSON with keys "
         '"hero_headline", "hero_subtext", "features" (array of 3 objects with '
@@ -138,34 +172,16 @@ async def copywriter(name: str, value_proposition: str) -> dict:
 
 
 async def brand(name: str, tagline: str) -> dict:
-    if MOCK_MODE:
-        return {
-            "palette": ["#4CAF50", "#2E8B57", "#32CD32", "#98FB98", "#D3D3D3"],
-            "logo_concept": "A dynamic arrow pointing upwards with the JobHopper "
-            "wordmark — symbolizing movement toward new opportunities.",
-            "font_style": "Open Sans, sans-serif — clean, modern, and professional.",
-        }
     system = (
         "You are a brand designer. Return ONLY JSON with keys "
-        '"palette" (array of 5 hex color strings), "logo_concept", and '
-        '"font_style". Ensure accessible contrast.'
+        '"palette" (array of exactly 5 hex color strings, nothing else), '
+        '"logo_concept", and "font_style". Ensure accessible contrast.'
     )
     user = f'Startup: "{name}"\nTagline: "{tagline}"'
     return await _call_llm(system, user)
 
 
 async def social(name: str, value_proposition: str) -> dict:
-    if MOCK_MODE:
-        return {
-            "captions": [
-                "Revolutionize your job search with JobHopper! Find tailored "
-                "opportunities & work on your terms. #JobHopper #CareerRevolution",
-                "Say goodbye to generic job applications. JobHopper helps you find "
-                "perfect, flexible roles. Join the revolution today! #JobHopper #FlexibleWork",
-                "Streamline your career journey with JobHopper. Tailored "
-                "opportunities await. #JobHopper #FindYourPerfectRole",
-            ]
-        }
     system = (
         "You are a social media manager. Return ONLY JSON with key "
         '"captions" — an array of exactly 3 launch captions. Each under 280 '
@@ -185,15 +201,14 @@ async def run_crew(idea: str, audience: str) -> dict:
     demo never shows a blank screen. Any failed section comes back empty and
     the frontend simply skips it.
     """
+    if MOCK_MODE:
+        return _load_offline_kit(idea)
+
     # 1. Strategist first — everything else depends on the name.
     try:
         strategy = await strategist(idea, audience)
     except Exception:
-        strategy = {
-            "name": "Your Startup",
-            "tagline": "",
-            "value_proposition": "",
-        }
+        strategy = {"name": "Your Startup", "tagline": "", "value_proposition": ""}
 
     name = strategy.get("name", "Your Startup")
     tagline = strategy.get("tagline", "")
@@ -214,7 +229,8 @@ async def run_crew(idea: str, audience: str) -> dict:
     return {
         "strategy": strategy,
         "copy": safe(copy),
-        "brand": safe(branding),
+        "brand": _clean_palette(safe(branding)),
         "social": safe(socials),
-        "mock": MOCK_MODE,
+        "mock": False,
+        "_engine": {"provider": "AMD GPU (vLLM)", "model": MODEL},
     }

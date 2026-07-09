@@ -199,14 +199,19 @@ python launchpad_real.py
 ```
 
 [`launchpad_real.py`](launchpad_real.py) runs the real four-agent crew against that
-endpoint using only the Python standard library. Its committed outputs —
-[`launchpad_kit.json`](launchpad_kit.json) (JobHopper) and
-[`launchpad_kit_fitpro.json`](launchpad_kit_fitpro.json) (FitPro) — each record:
+endpoint using only the Python standard library. Its committed outputs live in
+[`backend/kits/`](backend/kits) — one per example idea (*JobHive*, *BrewBarista*,
+*FitPro*, *PawWalker*) — and each records:
 
 ```json
 "mock": false,
 "_engine": { "provider": "AMD Developer Cloud (vLLM)", "model": "Qwen/Qwen2.5-7B-Instruct" }
 ```
+
+**Offline mode.** With no live endpoint configured, the app serves these saved
+AMD-generated kits and says so plainly in the UI, rather than pretending to
+generate. Run the same idea twice against a live GPU and you get a different
+name each time — nothing is hardcoded.
 
 **Portability.** The backend talks to any OpenAI-compatible endpoint
 (`FIREWORKS_BASE_URL` + `FIREWORKS_MODEL`), so the identical code also runs on

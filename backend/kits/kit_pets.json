@@ -1,0 +1,54 @@
+{
+  "strategy": {
+    "name": "PawWalker",
+    "tagline": "Walkies on Demand!",
+    "value_proposition": "Quick, reliable pet care and dog walking for busy pet owners."
+  },
+  "copy": {
+    "hero_headline": "PawWalker - Your Busy Pet's Best Friend",
+    "hero_subtext": "Reliable pet care and dog walking services tailored for your busy schedule.",
+    "features": [
+      {
+        "title": "Professional Dog Walkers",
+        "desc": "Meet our trained and experienced dog walkers who love pets as much as you do."
+      },
+      {
+        "title": "Flexible Scheduling",
+        "desc": "Choose from a variety of times that fit your busy lifestyle, ensuring your pet gets the attention they deserve."
+      },
+      {
+        "title": "Peace of Mind",
+        "desc": "Rest easy knowing your pet is in good hands with our secure, reliable, and friendly service."
+      }
+    ],
+    "cta": "Book Your First Walk Today!"
+  },
+  "brand": {
+    "palette": [
+      "#FFC107",
+      "A vibrant yellow for energy and positivity",
+      "#4CAF50",
+      "A green for trust and growth",
+      "#F44336",
+      "A red for urgency and action",
+      "#9C27B0",
+      "A purple for creativity and uniqueness",
+      "#2196F3",
+      "A blue for reliability and professionalism"
+    ],
+    "logo_concept": "A walking dog silhouette intertwined with a walking person silhouette, symbolizing partnership in walks.",
+    "font_style": "Roboto Condensed, sans-serif; a clean, modern font that is both readable and dynamic."
+  },
+  "social": {
+    "captions": [
+      "Meet PawWalker - your go-to solution for quick & reliable pet care! 🐾 We make sure your furry friends get the love & walks they deserve. #PetLovers #DogWalking",
+      "Busy? No time to walk your dog? Let us take care of them! PawWalker offers convenient and reliable pet care services. 🏃‍♂️🐾 #PetSitting #DogWalkers",
+      "PawWalker: because your pets deserve the best care when you're busy. Reliable, quick, and always ready to help. 🐶👩‍🦰 #PetCare #PetFriendly"
+    ]
+  },
+  "mock": false,
+  "_engine": {
+    "provider": "AMD Developer Cloud (vLLM)",
+    "model": "Qwen/Qwen2.5-7B-Instruct"
+  }
+}

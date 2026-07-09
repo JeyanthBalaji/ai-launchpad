@@ -7,10 +7,10 @@ const STEP_MS = 1100;
 
 // Clickable example ideas — make the demo flow instantly and show variety.
 const EXAMPLES = [
-  { label: "Coffee subscription", idea: "a monthly specialty coffee subscription", audience: "coffee lovers" },
-  { label: "Fitness app", idea: "an app that builds personalized home workouts", audience: "busy professionals" },
+  { label: "Coffee subscription", idea: "a monthly coffee bean subscription for home baristas", audience: "coffee lovers" },
+  { label: "Fitness app", idea: "a fitness app that builds personalized workout plans", audience: "busy professionals" },
   { label: "Student jobs", idea: "an app that helps students find part-time jobs", audience: "college students" },
-  { label: "Pet care", idea: "an on-demand dog walking and pet sitting service", audience: "pet owners" },
+  { label: "Pet care", idea: "an on-demand pet care and dog walking service", audience: "pet owners" },
 ];
 
 // Rotating placeholder ideas so the page feels alive on load.
